@@ -1,0 +1,133 @@
+.stageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding-top: 100px;
+  padding-bottom: 60px;
+}
+
+.headerArea {
+  text-align: center;
+  margin-bottom: 2rem;
+  z-index: 20;
+}
+
+.titleWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.title {
+  font-size: 5rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  background: linear-gradient(180deg, #ffffff 0%, #a0a0a0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.subtitle {
+  font-size: 3rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: var(--accent-color);
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 500px;
+  line-height: 1.6;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.mainArea {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1400px;
+  padding: 0 48px;
+  margin-top: -2rem; /* Pull up product slightly to overlap if needed */
+}
+
+.metadataAreaLeft,
+.metadataAreaRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metadataAreaLeft {
+  align-items: flex-end;
+  padding-right: 48px;
+}
+
+.metadataAreaRight {
+  align-items: flex-start;
+  padding-left: 48px;
+}
+
+.visualArea {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.controlsArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+@media (max-width: 1024px) {
+  .title {
+    font-size: 4rem;
+  }
+  .subtitle {
+    font-size: 2.5rem;
+  }
+  .mainArea {
+    flex-direction: column;
+    padding: 0 24px;
+  }
+  .metadataAreaLeft,
+  .metadataAreaRight {
+    flex: none;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+    margin-top: 2rem;
+  }
+  .metadataAreaRight {
+    margin-top: 1rem;
+  }
+  .controlsArea {
+    margin-top: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 3rem;
+  }
+  .subtitle {
+    font-size: 2rem;
+  }
+  .description {
+    font-size: 1rem;
+    padding: 0 24px;
+  }
+}
