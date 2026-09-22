@@ -32,9 +32,9 @@
 
 .lightModeImage {
   mix-blend-mode: multiply;
-  /* Invert and hue shift to simulate silver/white laptop while preserving highlights */
-  -webkit-filter: invert(0.9) hue-rotate(180deg) saturate(1.5) brightness(1.2) contrast(1.1) !important;
-  filter: invert(0.9) hue-rotate(180deg) saturate(1.5) brightness(1.2) contrast(1.1) !important;
+  /* Premium platinum/silver finish: Full invert, slight cyan hue shift, reduced saturation to look like metal, high contrast */
+  -webkit-filter: invert(1) hue-rotate(190deg) saturate(0.6) brightness(1.05) contrast(1.35) !important;
+  filter: invert(1) hue-rotate(190deg) saturate(0.6) brightness(1.05) contrast(1.35) !important;
 }
 
 /* Hotspots / info panels need to stay flat when product tilts */
