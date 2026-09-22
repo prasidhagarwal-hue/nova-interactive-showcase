@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './AnimatedBackground.module.css';
 
 interface AnimatedBackgroundProps {
@@ -6,11 +6,8 @@ interface AnimatedBackgroundProps {
 }
 
 export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ theme }) => {
-  const [particles, setParticles] = useState<Array<{ id: number; left: string; top: string; delay: string; duration: string; size: string; opacity: number }>>([]);
-
-  useEffect(() => {
-    // Generate static random particles so it doesn't cause hydration mismatch or flicker
-    const newParticles = Array.from({ length: 30 }).map((_, i) => ({
+  const [particles] = useState<Array<{ id: number; left: string; top: string; delay: string; duration: string; size: string; opacity: number }>>(() => {
+    return Array.from({ length: 30 }).map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
@@ -19,8 +16,7 @@ export const AnimatedBackground: React.FC<AnimatedBackgroundProps> = ({ theme })
       size: `${2 + Math.random() * 4}px`,
       opacity: 0.1 + Math.random() * 0.4
     }));
-    setParticles(newParticles);
-  }, []);
+  });
 
   return (
     <div className={`${styles.background} ${theme === 'light' ? styles.light : styles.dark}`}>

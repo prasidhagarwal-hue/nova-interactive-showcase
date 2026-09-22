@@ -5,11 +5,14 @@ NOVA is an interactive, premium product showcase for a fictional next-generation
 
 This project was built for the GDG on Campus SRM 2026-27 Technical Domain recruitment task: "Interactive Product Showcase using Framer".
 
-## Features
+## Features & Enhancements
 - **Product Variants**: Seamless switching between NOVA X1, X1 PRO, and X1 ULTRA models with fluid, interconnected animations.
-- **Interactive Hotspots**: Discoverable technical details via interactive product hotspots that reveal beautifully styled information panels.
-- **Cinematic Scroll Storytelling**: A 5-stage scroll-driven sequence that progressively reveals product features while intelligently scaling and shifting the product visual.
+- **Cinematic Scroll Storytelling**: A scroll-driven sequence that progressively reveals product features while scaling and shifting the product visual immersively.
+- **Interactive Hotspots**: Discoverable technical details via interactive product hotspots that reveal styled information panels.
 - **3D / Depth Interaction**: A subtle, physically grounded pointer-tracking interaction that tilts the product and shifts ambient lighting to create a premium sense of depth.
+- **Light/Dark Product Modes**: A seamlessly integrated theme toggle that gracefully shifts the environment and realistically simulates a premium platinum/silver product finish via CSS filter matrices.
+- **Model Comparison Section**: A frosted-glass comparison table designed to showcase model specifications side-by-side.
+- **Animated Background Environment**: Cinematic, ambient floating particles and soft gradients that react to theme switching.
 - **Responsive Design**: A meticulously crafted mobile-first experience that adapts layout, scroll behavior, and touch targets across all breakpoints.
 - **Accessibility**: Full keyboard navigation, visible focus rings, and robust support for `prefers-reduced-motion` (gracefully disabling parallax, 3D tilts, and complex scaling).
 
