@@ -41,13 +41,40 @@
 }
 
 .heroText {
-  align-items: center;
-  text-align: center;
-  width: 100%;
+  align-items: flex-start;
+  text-align: left;
+  width: 45%;
+  left: 5%;
   height: 100vh;
   top: 0;
   padding-top: 15vh;
   pointer-events: none;
+}
+
+.techBadges {
+  display: flex;
+  gap: 24px;
+  margin: 16px 0;
+}
+
+.badge {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.badgeTitle {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.badgeValue {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
 }
 
 .sideText {

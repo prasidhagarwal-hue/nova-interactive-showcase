@@ -26,8 +26,15 @@
   mix-blend-mode: screen; /* Helps blend the dark background of the image with the dark bg */
   mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
   -webkit-mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
-  transition: filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: filter 0.8s cubic-bezier(0.16, 1, 0.3, 1), mix-blend-mode 0.8s ease;
   z-index: 2;
+}
+
+.lightModeImage {
+  mix-blend-mode: multiply;
+  /* Invert and hue shift to simulate silver/white laptop while preserving highlights */
+  -webkit-filter: invert(0.9) hue-rotate(180deg) saturate(1.5) brightness(1.2) contrast(1.1) !important;
+  filter: invert(0.9) hue-rotate(180deg) saturate(1.5) brightness(1.2) contrast(1.1) !important;
 }
 
 /* Hotspots / info panels need to stay flat when product tilts */

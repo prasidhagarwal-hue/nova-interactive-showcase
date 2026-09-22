@@ -7,6 +7,7 @@ import styles from './ProductStage.module.css';
 
 interface ProductStageProps {
   scrollYProgress: MotionValue<number>;
+  theme: 'dark' | 'light';
 }
 
 // Variant specific data
@@ -27,7 +28,7 @@ const variantData = {
 
 type HotspotId = 'neural-engine' | 'display' | 'thermal-core';
 
-export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) => {
+export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress, theme }) => {
   const [variant, setVariant] = useState<VariantType>('X1');
   const [suggestedHotspot, setSuggestedHotspot] = useState<HotspotId | null>(null);
   const shouldReduceMotion = useReducedMotion();
@@ -79,13 +80,18 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
   );
 
   // STAGE 2: Discover / Shift (0.2 - 0.8)
-  // Shift product to the left on desktop, keep centered on mobile
+  // Shift product: starts on the right (hero), moves left (middle)
   const productX = useTransform(
     scrollYProgress, 
     [0.15, 0.3, 0.8, 0.9], 
-    ["0%", isMobile ? "0%" : "-20%", isMobile ? "0%" : "-20%", "0%"]
+    ["15%", isMobile ? "0%" : "-10%", isMobile ? "0%" : "-10%", "15%"]
   );
-  const productScale = useTransform(scrollYProgress, [0.15, 0.3, 0.8, 0.9], [1, shouldReduceMotion ? 1 : 1.1, shouldReduceMotion ? 1 : 1.1, 1]);
+  // Scale product: massively fills screen at start and end
+  const productScale = useTransform(
+    scrollYProgress, 
+    [0.15, 0.3, 0.8, 0.9], 
+    [isMobile ? 1.2 : 1.6, shouldReduceMotion ? 1 : 1.1, shouldReduceMotion ? 1 : 1.1, isMobile ? 1.2 : 1.6]
+  );
 
   // STAGE 3: Tech Text - Neural (0.35 - 0.5)
   const tech1Opacity = useTransform(scrollYProgress, [0.3, 0.35, 0.5, 0.55], [0, 1, 1, 0]);
@@ -110,6 +116,22 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
         
         <div className={styles.heroControls}>
           <VariantSelector selected={variant} onSelect={setVariant} />
+          
+          <div className={styles.techBadges}>
+            <div className={styles.badge}>
+              <span className={styles.badgeTitle}>AI Engine</span>
+              <span className={styles.badgeValue}>Next-gen</span>
+            </div>
+            <div className={styles.badge}>
+              <span className={styles.badgeTitle}>4K OLED</span>
+              <span className={styles.badgeValue}>Display</span>
+            </div>
+            <div className={styles.badge}>
+              <span className={styles.badgeTitle}>18 HRS</span>
+              <span className={styles.badgeValue}>Battery</span>
+            </div>
+          </div>
+
           <CTA />
         </div>
       </motion.div>
@@ -118,6 +140,7 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
       <div className={styles.visualArea}>
         <ProductVisual 
           variant={variant} 
+          theme={theme}
           suggestedHotspot={suggestedHotspot}
           style={{ x: productX, scale: productScale }}
         />

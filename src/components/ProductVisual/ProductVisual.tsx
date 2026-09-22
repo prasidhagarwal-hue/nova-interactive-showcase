@@ -6,6 +6,7 @@ import { HotspotInfo } from '../HotspotInfo/HotspotInfo';
 
 interface ProductVisualProps {
   variant: 'X1' | 'X1 PRO' | 'X1 ULTRA';
+  theme: 'dark' | 'light';
   suggestedHotspot?: HotspotId | null;
   style?: any; // To accept motion styles
 }
@@ -84,7 +85,7 @@ const MAX_ROTATE_Y = 5;
 // Parallax offset for the ambient light (moves opposite to product for depth)
 const LIGHT_OFFSET_FACTOR = 15;
 
-export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, suggestedHotspot = null, style }) => {
+export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, theme, suggestedHotspot = null, style }) => {
   const currentStyle = variantStyles[variant];
   const [activeHotspotId, setActiveHotspotId] = useState<HotspotId | null>(null);
   const [hoveredHotspotId, setHoveredHotspotId] = useState<HotspotId | null>(null);
@@ -175,7 +176,7 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, suggested
           <img 
             src="/nova_product.jpg" 
             alt={`NOVA ${variant}`} 
-            className={styles.productImage}
+            className={`${styles.productImage} ${theme === 'light' ? styles.lightModeImage : ''}`}
             style={{ filter: currentStyle.filter }}
             draggable="false"
           />
