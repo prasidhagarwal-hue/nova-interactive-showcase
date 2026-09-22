@@ -118,6 +118,15 @@
   margin-top: 32px;
 }
 
+.mobileHeroControls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 300px; /* Push below the absolutely positioned visual */
+  pointer-events: auto;
+}
+
 /* Responsive Overrides */
 @media (max-width: 1024px) {
   .sideText {

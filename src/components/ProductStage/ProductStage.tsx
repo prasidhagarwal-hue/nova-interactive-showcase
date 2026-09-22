@@ -105,6 +105,14 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
         <h1 className={styles.title}>{variantData['X1'].title.split(' ')[0]}</h1>
         <h2 className={styles.subtitle}>{variantData['X1'].title.split(' ').slice(1).join(' ')}</h2>
         <p className={styles.description}>"{variantData['X1'].description}"</p>
+        
+        {/* Mobile-only early controls */}
+        {isMobile && (
+          <div className={styles.mobileHeroControls}>
+            <VariantSelector selected={variant} onSelect={setVariant} />
+            <CTA />
+          </div>
+        )}
       </motion.div>
 
       {/* Product Visual Container */}

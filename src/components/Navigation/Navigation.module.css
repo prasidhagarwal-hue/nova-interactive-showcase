@@ -58,11 +58,35 @@
   100% { opacity: 1; }
 }
 
+.navLink:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+.mobileMenuBtn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+  margin-right: -8px; /* Offset padding */
+  border-radius: 4px;
+}
+
+.mobileMenuBtn:focus-visible {
+  outline: 2px solid var(--accent-color);
+}
+
 @media (max-width: 768px) {
   .header {
     padding: 20px 24px;
   }
-  .nav {
+  .nav, .status {
     display: none;
+  }
+  .mobileMenuBtn {
+    display: block;
   }
 }
