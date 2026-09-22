@@ -40,6 +40,8 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const prevScroll = React.useRef(0);
+
   // --- Scroll State Logic ---
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     // Determine suggested hotspot
@@ -53,14 +55,13 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
       setSuggestedHotspot(null);
     }
 
-    // Determine variant (force X1 PRO at the end)
-    if (latest > 0.9) {
+    // Determine variant (force X1 PRO at the end only on threshold crossing)
+    if (latest > 0.9 && prevScroll.current <= 0.9) {
       setVariant('X1 PRO');
-    } else if (latest < 0.1) {
-      // Allow manual selection to stick if they aren't at the very top/bottom, 
-      // but if they scroll all the way back up, reset to X1 to re-tell the story.
+    } else if (latest < 0.1 && prevScroll.current >= 0.1) {
       setVariant('X1');
     }
+    prevScroll.current = latest;
   });
 
   // --- Visual Transforms ---
@@ -69,9 +70,13 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
   // We can't use hooks for window size directly without a resize listener, so we'll use CSS clamped values
   // via string interpolation, or just use percentages.
   
-  // STAGE 1: Intro (0 - 0.2)
-  const introOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  const introY = useTransform(scrollYProgress, [0, 0.15], [0, shouldReduceMotion ? 0 : -50]);
+  // STAGE 1 & 5: Unified Hero Text (Visible at start and end)
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 0.95], [1, 0, 0, 1]);
+  const heroY = useTransform(
+    scrollYProgress, 
+    [0, 0.15, 0.85, 0.95], 
+    [0, shouldReduceMotion ? 0 : -50, shouldReduceMotion ? 0 : 50, 0]
+  );
 
   // STAGE 2: Discover / Shift (0.2 - 0.8)
   // Shift product to the left on desktop, keep centered on mobile
@@ -90,29 +95,23 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
   const tech2Opacity = useTransform(scrollYProgress, [0.5, 0.55, 0.8, 0.85], [0, 1, 1, 0]);
   const tech2Y = useTransform(scrollYProgress, [0.5, 0.55, 0.8, 0.85], [shouldReduceMotion ? 0 : 50, 0, 0, shouldReduceMotion ? 0 : -50]);
 
-  // STAGE 5: Final Reveal (0.85 - 1.0)
-  const finalOpacity = useTransform(scrollYProgress, [0.85, 0.95], [0, 1]);
-  const finalY = useTransform(scrollYProgress, [0.85, 0.95], [shouldReduceMotion ? 0 : 50, 0]);
 
   return (
     <div className={styles.stageContainer}>
       
-      {/* Intro Text (Stage 1) */}
+      {/* Single Unified Hero Block */}
       <motion.div 
-        className={`${styles.textOverlay} ${styles.introText}`}
-        style={{ opacity: introOpacity, y: introY }}
+        className={`${styles.textOverlay} ${styles.heroText}`}
+        style={{ opacity: heroOpacity, y: heroY }}
       >
-        <h1 className={styles.title}>{variantData['X1'].title.split(' ')[0]}</h1>
-        <h2 className={styles.subtitle}>{variantData['X1'].title.split(' ').slice(1).join(' ')}</h2>
-        <p className={styles.description}>"{variantData['X1'].description}"</p>
+        <h1 className={styles.title}>{variantData[variant].title.split(' ')[0]}</h1>
+        <h2 className={styles.subtitle}>{variantData[variant].title.split(' ').slice(1).join(' ')}</h2>
+        <p className={styles.description}>"{variantData[variant].description}"</p>
         
-        {/* Mobile-only early controls */}
-        {isMobile && (
-          <div className={styles.mobileHeroControls}>
-            <VariantSelector selected={variant} onSelect={setVariant} />
-            <CTA />
-          </div>
-        )}
+        <div className={styles.heroControls}>
+          <VariantSelector selected={variant} onSelect={setVariant} />
+          <CTA />
+        </div>
       </motion.div>
 
       {/* Product Visual Container */}
@@ -144,20 +143,6 @@ export const ProductStage: React.FC<ProductStageProps> = ({ scrollYProgress }) =
         <p className={styles.storySub}>Sustained performance for the most demanding rendering tasks.</p>
       </motion.div>
 
-      {/* Final Reveal Text & CTA (Stage 5) */}
-      <motion.div 
-        className={`${styles.textOverlay} ${styles.finalText}`}
-        style={{ opacity: finalOpacity, y: finalY }}
-      >
-        <h1 className={styles.title}>{variantData['X1 PRO'].title.split(' ')[0]}</h1>
-        <h2 className={styles.subtitle}>{variantData['X1 PRO'].title.split(' ').slice(1).join(' ')}</h2>
-        <p className={styles.description}>"{variantData['X1 PRO'].description}"</p>
-        
-        <div className={styles.controlsArea}>
-          <VariantSelector selected={variant} onSelect={setVariant} />
-          <CTA />
-        </div>
-      </motion.div>
 
     </div>
   );

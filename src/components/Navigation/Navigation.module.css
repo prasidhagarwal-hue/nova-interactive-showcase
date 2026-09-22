@@ -34,6 +34,12 @@
   color: var(--text-primary);
 }
 
+.navLink.active {
+  color: var(--text-primary);
+  /* Optional subtle indicator */
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
 .status {
   display: flex;
   align-items: center;
@@ -82,8 +88,26 @@
 @media (max-width: 768px) {
   .header {
     padding: 20px 24px;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(10px);
   }
-  .nav, .status {
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 24px;
+    gap: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .nav.mobileOpen {
+    display: flex;
+  }
+  .status {
     display: none;
   }
   .mobileMenuBtn {

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
+import { motion, AnimatePresence, useReducedMotion, useSpring } from 'framer-motion';
 import styles from './ProductVisual.module.css';
 import { Hotspot } from '../Hotspot/Hotspot';
 import { HotspotInfo } from '../HotspotInfo/HotspotInfo';
@@ -78,11 +78,60 @@ const hotspotsData: HotspotConfig[] = [
   }
 ];
 
+// Maximum rotation angles in degrees — intentionally small for subtlety
+const MAX_ROTATE_X = 5;
+const MAX_ROTATE_Y = 5;
+// Parallax offset for the ambient light (moves opposite to product for depth)
+const LIGHT_OFFSET_FACTOR = 15;
+
 export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, suggestedHotspot = null, style }) => {
   const currentStyle = variantStyles[variant];
   const [activeHotspotId, setActiveHotspotId] = useState<HotspotId | null>(null);
   const [hoveredHotspotId, setHoveredHotspotId] = useState<HotspotId | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // --- 3D Pointer Interaction (springs for silky smooth return-to-neutral) ---
+  const springConfig = { stiffness: 150, damping: 20, mass: 0.5 };
+  const rotateX = useSpring(0, springConfig);
+  const rotateY = useSpring(0, springConfig);
+  const lightX = useSpring(0, springConfig);
+  const lightY = useSpring(0, springConfig);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (isMobile || shouldReduceMotion) return;
+    const container = containerRef.current;
+    if (!container) return;
+
+    const rect = container.getBoundingClientRect();
+    // Normalise pointer position to -1…+1 relative to container center
+    const normX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    const normY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+
+    // Product rotation: pointer-right → rotate-Y positive, pointer-down → rotate-X negative
+    rotateY.set(normX * MAX_ROTATE_Y);
+    rotateX.set(-normY * MAX_ROTATE_X);
+
+    // Ambient light moves in the opposite direction for depth parallax
+    lightX.set(-normX * LIGHT_OFFSET_FACTOR);
+    lightY.set(-normY * LIGHT_OFFSET_FACTOR);
+  }, [isMobile, shouldReduceMotion, rotateX, rotateY, lightX, lightY]);
+
+  const handlePointerLeave = useCallback(() => {
+    // Smoothly return to neutral via springs
+    rotateX.set(0);
+    rotateY.set(0);
+    lightX.set(0);
+    lightY.set(0);
+  }, [rotateX, rotateY, lightX, lightY]);
 
   const handleHotspotClick = (e: React.MouseEvent, id: HotspotId) => {
     e.stopPropagation(); // Prevent container click from immediately closing
@@ -98,7 +147,17 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, suggested
   const displayHotspotId = activeHotspotId || hoveredHotspotId || suggestedHotspot;
 
   return (
-    <motion.div className={styles.visualContainer} ref={containerRef} onClick={handleContainerClick} style={style}>
+    <motion.div
+      className={styles.visualContainer}
+      ref={containerRef}
+      onClick={handleContainerClick}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      style={{
+        ...style,
+        perspective: 800,
+      }}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={variant}
@@ -107,6 +166,11 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, suggested
           exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className={styles.imageWrapper}
+          style={{
+            rotateX: isMobile || shouldReduceMotion ? 0 : rotateX,
+            rotateY: isMobile || shouldReduceMotion ? 0 : rotateY,
+            transformStyle: 'preserve-3d' as const,
+          }}
         >
           <img 
             src="/nova_product.jpg" 
@@ -116,43 +180,51 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, suggested
             draggable="false"
           />
           
-          {/* Hotspots Layer */}
-          {hotspotsData.map(hotspot => (
-            <Hotspot
-              key={hotspot.id}
-              id={hotspot.id}
-              x={hotspot.position.x}
-              y={hotspot.position.y}
-              isActive={activeHotspotId === hotspot.id || hoveredHotspotId === hotspot.id}
-              onMouseEnter={() => !activeHotspotId && setHoveredHotspotId(hotspot.id)}
-              onMouseLeave={() => setHoveredHotspotId(null)}
-              onClick={(e) => handleHotspotClick(e, hotspot.id)}
-            />
-          ))}
-
-          {/* Info Panels Layer */}
-          {hotspotsData.map(hotspot => {
-            const variantData = hotspot.variants[variant];
-            return (
-              <HotspotInfo
-                key={`info-${hotspot.id}`}
-                number={hotspot.number}
-                title={hotspot.label}
-                description={variantData.description}
-                metric={variantData.value}
+          {/* Hotspots Layer — kept flat in the transform hierarchy so panels stay stable */}
+          <div className={styles.hotspotsLayer}>
+            {hotspotsData.map(hotspot => (
+              <Hotspot
+                key={hotspot.id}
+                id={hotspot.id}
                 x={hotspot.position.x}
                 y={hotspot.position.y}
-                isVisible={displayHotspotId === hotspot.id}
-                onClose={() => setActiveHotspotId(null)}
+                isActive={activeHotspotId === hotspot.id || hoveredHotspotId === hotspot.id}
+                onMouseEnter={() => !activeHotspotId && setHoveredHotspotId(hotspot.id)}
+                onMouseLeave={() => setHoveredHotspotId(null)}
+                onClick={(e) => handleHotspotClick(e, hotspot.id)}
               />
-            )
-          })}
+            ))}
+
+            {/* Info Panels Layer */}
+            {hotspotsData.map(hotspot => {
+              const variantData = hotspot.variants[variant];
+              return (
+                <HotspotInfo
+                  key={`info-${hotspot.id}`}
+                  number={hotspot.number}
+                  title={hotspot.label}
+                  description={variantData.description}
+                  metric={variantData.value}
+                  x={hotspot.position.x}
+                  y={hotspot.position.y}
+                  isVisible={displayHotspotId === hotspot.id}
+                  onClose={() => setActiveHotspotId(null)}
+                />
+              )
+            })}
+          </div>
         </motion.div>
       </AnimatePresence>
-      <motion.div 
+
+      {/* Ambient Light — parallax offset for depth */}
+      <motion.div
         className={styles.ambientLight}
         animate={{ backgroundColor: currentStyle.lightColor, scale: currentStyle.scale }}
         transition={{ duration: 1.5, ease: 'easeOut' }}
+        style={{
+          x: isMobile || shouldReduceMotion ? 0 : lightX,
+          y: isMobile || shouldReduceMotion ? 0 : lightY,
+        }}
       />
     </motion.div>
   );

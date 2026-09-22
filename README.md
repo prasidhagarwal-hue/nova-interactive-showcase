@@ -1,32 +1,54 @@
-# React + TypeScript + Vite
+# NOVA — Interactive AI Workstation Showcase
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Overview
+NOVA is an interactive, premium product showcase for a fictional next-generation AI workstation ("The workstation that thinks with you"). It features a cinematic, scroll-driven storytelling experience, interactive 3D depth, and seamless product variant switching.
 
-Currently, two official plugins are available:
+This project was built for the GDG on Campus SRM 2026-27 Technical Domain recruitment task: "Interactive Product Showcase using Framer".
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
+- **Product Variants**: Seamless switching between NOVA X1, X1 PRO, and X1 ULTRA models with fluid, interconnected animations.
+- **Interactive Hotspots**: Discoverable technical details via interactive product hotspots that reveal beautifully styled information panels.
+- **Cinematic Scroll Storytelling**: A 5-stage scroll-driven sequence that progressively reveals product features while intelligently scaling and shifting the product visual.
+- **3D / Depth Interaction**: A subtle, physically grounded pointer-tracking interaction that tilts the product and shifts ambient lighting to create a premium sense of depth.
+- **Responsive Design**: A meticulously crafted mobile-first experience that adapts layout, scroll behavior, and touch targets across all breakpoints.
+- **Accessibility**: Full keyboard navigation, visible focus rings, and robust support for `prefers-reduced-motion` (gracefully disabling parallax, 3D tilts, and complex scaling).
 
-## React Compiler
+## Tech / Tools
+- React 19
+- TypeScript
+- Vite
+- Framer Motion (for all animations, scroll tracking, and spring physics)
+- CSS Modules (Vanilla CSS for scalable, isolated styling)
+- Lucide React (Icons)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Design Direction
+The project employs a premium, futuristic visual identity designed to feel cinematic and high-tech. It utilizes a dark mode color palette, glassmorphism for floating UI elements, and highly controlled, smooth typography (Inter/system-sans). 
 
-## Expanding the Oxlint configuration
+## Interaction Architecture
+- **Components**: The architecture is highly modular, splitting logic between `ProductStage` (scroll orchestration), `ProductVisual` (3D transforms and hotspot layers), and individual UI elements like `VariantSelector` and `CTA`.
+- **State Management**: React `useState` drives variant selection and active hotspots.
+- **Animations**: `framer-motion`'s `<AnimatePresence>` handles smooth variant transitions, while `useTransform` maps vertical scroll progress (`scrollYProgress`) directly to visual styles (opacity, scale, translate) without expensive React re-renders. The 3D depth effect utilizes `useSpring` for silky, physics-based pointer tracking.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## How to Run
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+2. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+   Open `http://localhost:5173/` in your browser.
+
+3. **Build for production**:
+   ```bash
+   npm run build
+   ```
+
+## Screenshots
+*(Add screenshots here after deploying)*
+
+## Live Demo
+*(Add URL here if deployed)*
