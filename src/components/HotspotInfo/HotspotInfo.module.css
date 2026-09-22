@@ -1,0 +1,123 @@
+.infoPanel {
+  position: absolute;
+  width: 280px;
+  background: rgba(10, 10, 10, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  z-index: 30;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  pointer-events: auto; /* Allow interacting with the panel (like close button) */
+}
+
+/* Modifier for panel positioning */
+.alignLeft {
+  /* Connection line originates from the left */
+}
+
+.alignRight {
+  /* Connection line originates from the right */
+}
+
+.connectingLine {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+}
+
+.alignRight .connectingLine {
+  background: linear-gradient(270deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.numberWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.number {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+.title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  margin: 0;
+  flex-grow: 1;
+  padding-top: 4px;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  margin: -4px -4px 0 0;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  display: none; /* Hidden on desktop by default, shown via media query */
+}
+
+.closeButton:hover {
+  opacity: 1;
+  color: var(--text-primary);
+}
+
+.metric {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .infoPanel {
+    /* Override absolute positioning for mobile to show it at the bottom or top consistently */
+    position: fixed !important; 
+    bottom: 24px !important;
+    top: auto !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 48px);
+    max-width: 400px;
+    margin: 0 !important;
+  }
+
+  .connectingLine {
+    display: none; /* Hide connecting line on mobile as it's not absolutely positioned next to hotspot */
+  }
+
+  .closeButton {
+    display: block;
+  }
+}

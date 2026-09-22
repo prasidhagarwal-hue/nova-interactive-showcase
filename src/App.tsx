@@ -1,6 +1,7 @@
 
 import { Navigation } from './components/Navigation/Navigation';
 import { ProductStage } from './components/ProductStage/ProductStage';
+import { ScrollSequence } from './components/ScrollSequence/ScrollSequence';
 
 function App() {
   return (
@@ -8,7 +9,11 @@ function App() {
       <div className="atmospheric-bg"></div>
       <Navigation />
       <main>
-        <ProductStage />
+        <ScrollSequence>
+          {({ scrollYProgress }) => (
+            <ProductStage scrollYProgress={scrollYProgress} />
+          )}
+        </ScrollSequence>
       </main>
     </>
   );
