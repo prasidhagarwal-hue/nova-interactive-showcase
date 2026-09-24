@@ -9,17 +9,20 @@
   right: 0;
   z-index: 100;
   background: transparent;
+  pointer-events: none;
 }
 
 .brand {
   font-weight: 700;
   letter-spacing: 0.1em;
   font-size: 1.1rem;
+  pointer-events: auto;
 }
 
 .nav {
   display: flex;
   gap: 32px;
+  pointer-events: auto;
 }
 
 .navLink {
@@ -44,6 +47,7 @@
   display: flex;
   align-items: center;
   gap: 24px;
+  pointer-events: auto;
 }
 
 .statusIndicator {
@@ -104,6 +108,7 @@
   padding: 8px;
   margin-right: -8px; /* Offset padding */
   border-radius: 4px;
+  pointer-events: auto;
 }
 
 .mobileMenuBtn:focus-visible {
