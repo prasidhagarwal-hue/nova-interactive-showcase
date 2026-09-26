@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 import { useScroll, useMotionValueEvent } from 'framer-motion';
-import { Moon, Sun } from 'lucide-react';
 import styles from './Navigation.module.css';
 
-interface NavigationProps {
-  theme: 'dark' | 'light';
-  setTheme: (theme: 'dark' | 'light') => void;
-}
-
-export const Navigation: React.FC<NavigationProps> = ({ theme, setTheme }) => {
+export const Navigation: React.FC = () => {
   const [activeSection, setActiveSection] = useState<'product' | 'technology' | 'explore'>('product');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
@@ -56,13 +50,7 @@ export const Navigation: React.FC<NavigationProps> = ({ theme, setTheme }) => {
         </a>
       </nav>
       <div className={styles.status}>
-        <button 
-          className={styles.themeToggle} 
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          aria-label="Toggle Theme"
-        >
-          {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
-        </button>
+        {/* Theme toggle temporarily disabled until a proper Light Mode asset is available */}
         <div className={styles.statusIndicator}>
           <span className={styles.statusDot}></span>
           SYSTEM ONLINE

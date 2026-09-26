@@ -30,11 +30,26 @@
   z-index: 2;
 }
 
-.lightModeImage {
+
+.imageWrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  width: 60%;
+  height: 20px;
+  background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0) 70%);
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(8px);
   mix-blend-mode: multiply;
-  /* Premium platinum/silver finish: Full invert, slight cyan hue shift, reduced saturation to look like metal, high contrast */
-  -webkit-filter: invert(1) hue-rotate(190deg) saturate(0.6) brightness(1.05) contrast(1.35) !important;
-  filter: invert(1) hue-rotate(190deg) saturate(0.6) brightness(1.05) contrast(1.35) !important;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.imageWrapper.lightShadow::after {
+  opacity: 1;
 }
 
 /* Hotspots / info panels need to stay flat when product tilts */

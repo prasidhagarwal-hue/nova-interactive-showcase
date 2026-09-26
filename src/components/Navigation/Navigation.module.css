@@ -118,8 +118,7 @@
 @media (max-width: 768px) {
   .header {
     padding: 20px 24px;
-    background: rgba(10, 10, 10, 0.8);
-    backdrop-filter: blur(10px);
+    background: transparent;
   }
   .nav {
     display: none;

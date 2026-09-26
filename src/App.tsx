@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Navigation } from './components/Navigation/Navigation';
 import { ProductStage } from './components/ProductStage/ProductStage';
 import { ScrollSequence } from './components/ScrollSequence/ScrollSequence';
@@ -7,7 +7,7 @@ import { AnimatedBackground } from './components/AnimatedBackground/AnimatedBack
 import { ComparisonSection } from './components/ComparisonSection/ComparisonSection';
 
 function App() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const theme = 'dark';
 
   // Apply theme class to body for global color changes
   useEffect(() => {
@@ -17,7 +17,7 @@ function App() {
   return (
     <>
       <AnimatedBackground theme={theme} />
-      <Navigation theme={theme} setTheme={setTheme} />
+      <Navigation />
       <main>
         <ScrollSequence>
           {({ scrollYProgress }) => (

@@ -144,6 +144,16 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, theme, su
     setActiveHotspotId(null);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setActiveHotspotId(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // The hotspot to display info for is either the active (clicked) one, the hovered one, or the one suggested by the parent (unless another is actively clicked)
   const displayHotspotId = activeHotspotId || hoveredHotspotId || suggestedHotspot;
 
@@ -159,6 +169,7 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, theme, su
         perspective: 800,
       }}
     >
+
       <AnimatePresence mode="wait">
         <motion.div
           key={variant}
@@ -166,7 +177,7 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, theme, su
           animate={{ opacity: 1, scale: currentStyle.scale, filter: 'blur(0px)' }}
           exit={{ opacity: 0, scale: 1.05, filter: 'blur(10px)' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className={styles.imageWrapper}
+          className={`${styles.imageWrapper} ${theme === 'light' ? styles.lightShadow : ''}`}
           style={{
             rotateX: isMobile || shouldReduceMotion ? 0 : rotateX,
             rotateY: isMobile || shouldReduceMotion ? 0 : rotateY,
@@ -176,7 +187,7 @@ export const ProductVisual: React.FC<ProductVisualProps> = ({ variant, theme, su
           <img 
             src="/nova_product.jpg" 
             alt={`NOVA ${variant}`} 
-            className={`${styles.productImage} ${theme === 'light' ? styles.lightModeImage : ''}`}
+            className={styles.productImage}
             style={{ filter: currentStyle.filter }}
             draggable="false"
           />

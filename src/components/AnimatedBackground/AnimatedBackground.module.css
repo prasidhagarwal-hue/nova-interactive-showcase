@@ -26,10 +26,10 @@
 
 /* Light Theme */
 .light .gradientLayer1 {
-  background: radial-gradient(circle at 20% 30%, rgba(58, 134, 255, 0.05), transparent 60%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.4) 50%, rgba(255, 255, 255, 0) 100%);
 }
 .light .gradientLayer2 {
-  background: radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.03), transparent 60%);
+  display: none;
 }
 
 .particlesContainer {
