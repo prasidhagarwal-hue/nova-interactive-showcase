@@ -5,6 +5,7 @@ import { ProductStage } from './components/ProductStage/ProductStage';
 import { ScrollSequence } from './components/ScrollSequence/ScrollSequence';
 import { AnimatedBackground } from './components/AnimatedBackground/AnimatedBackground';
 import { ComparisonSection } from './components/ComparisonSection/ComparisonSection';
+import { NovaIntelligence } from './components/NovaIntelligence/NovaIntelligence';
 
 function App() {
   const theme = 'dark';
@@ -24,6 +25,7 @@ function App() {
             <ProductStage scrollYProgress={scrollYProgress} theme={theme} />
           )}
         </ScrollSequence>
+        <NovaIntelligence theme={theme} />
         <ComparisonSection />
       </main>
     </>
