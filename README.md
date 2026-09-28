@@ -50,4 +50,4 @@ This project was built for the GDG on Campus SRM 2026-27 Technical Domain recrui
    ```
 
 ## Live Demo
-*(Add URL here if deployed)*
+https://vercel.com/prasidh/nova-interactive-showcase
